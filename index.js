@@ -19,14 +19,33 @@ const userSchema = mongoose.Schema({
   password: String,
   age: Number  
 })
+
 const userModel = mongoose.model('user',userSchema);
 
+// * CRUD
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get("/users", async(req, res) => {
+ let users = await userModel.find()
+  res.json({message:"success",users })  
+});
 
-app.post('/', (req, res) => {
-    console.log(req.body)
-    res.json({ success: true })
-})
+app.post("/users", async(req,res) => { 
+  const {name,email,password,age} = req.body;
+  await userModel.insertMany({ name, email, password, age }) 
+  res.json({message:"user added",success: true}) 
+  })
+
+app.put("/users", async(req,res) => { 
+    const {name,email,password,age,_id} = req.body;
+    let user = await userModel.findByIdAndUpdate({_id},{ name, email, password, age },{new:true}) 
+    res.json({message:"success user updated"}) 
+    })
+
+app.delete("/users", async(req,res) => { 
+      const {_id} = req.body;
+      await userModel.findByIdAndDelete({_id}) 
+      res.json({message:"success"}) 
+      })
+
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
