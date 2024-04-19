@@ -1,8 +1,26 @@
-import express, { json } from 'express'
+import express from 'express'
+import mongoose from 'mongoose'
+
+
+
+
 const app = express()
 const port = 3000
 
-app.use(json())
+app.use(express.json())
+
+mongoose.connect('mongodb://localhost:27017/nodeMongodb')
+.then(() => console.log('Connected to CompassMongoDB!'))
+.catch((err) => { console.error("error !") })
+
+const userSchema = mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+  age: Number  
+})
+const userModel = mongoose.model('user',userSchema);
+
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
