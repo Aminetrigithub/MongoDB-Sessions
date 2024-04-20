@@ -13,7 +13,7 @@ app.use(express.json())
 // the connection
 dbConnection()
 
-app.use(userRouter)
+app.use('/users',userRouter)
 
 // * CRUD
 
